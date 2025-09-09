@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drukains Today</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#home">
+                <img src="logo.png" alt="Drukains Today Logo" height="30" class="d-inline-block align-text-top me-2">
+                Drukains Today
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home" onclick="showSection('home')">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item" id="nav-articles" style="display: none;">
+                        <a class="nav-link" href="#articles" onclick="showSection('articles')">
+                            <i class="fas fa-newspaper me-1"></i>Articles
+                        </a>
+                    </li>
+                    <li class="nav-item" id="nav-announcements" style="display: none;">
+                        <a class="nav-link" href="#announcements" onclick="showSection('announcements')">
+                            <i class="fas fa-bullhorn me-1"></i>Announcements
+                        </a>
+                    </li>
+                    <li class="nav-item" id="nav-reminders" style="display: none;">
+                        <a class="nav-link" href="#reminders" onclick="showSection('reminders')">
+                            <i class="fas fa-bell me-1"></i>Reminders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about" onclick="showSection('about')">
+                            <i class="fas fa-info-circle me-1"></i>About
+                        </a>
+                    </li>
+                    <li class="nav-item" id="nav-admin" style="display: none;">
+                        <a class="nav-link" href="#admin" onclick="showSection('admin')">
+                            <i class="fas fa-cog me-1"></i>Admin
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <div id="auth-section">
+                        <button class="btn btn-outline-light me-2" onclick="showLoginModal()">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </button>
+                        <button class="btn btn-light" onclick="showRegisterModal()">
+                            <i class="fas fa-user-plus me-1"></i>Register
+                        </button>
+                    </div>
+                    
+                    <div id="user-section" style="display: none;">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i>
+                                <span id="user-name">User</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#profile" onclick="showSection('profile')">
+                                    <i class="fas fa-user-circle me-2"></i>Profile
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mt-5 pt-4">
+        <!-- Loading Spinner -->
+        <div id="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Home Section -->
+        <section id="home-section" class="content-section" style="display: none;">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Principal's Note -->
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-user-tie me-2"></i>Principal's Note
+                            </h5>
+                        </div>
+                        <div class="card-body" id="principal-note">
+                            <p class="text-muted">Loading principal's note...</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent News -->
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-newspaper me-2"></i>Recent News
+                            </h5>
+                        </div>
+                        <div class="card-body" id="recent-news">
+                            <p class="text-muted">Loading recent news...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Important Reminders -->
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Important Reminders
+                            </h5>
+                        </div>
+                        <div class="card-body" id="important-reminders">
+                            <p class="text-muted">Loading reminders...</p>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Winners -->
+                    <div class="card mb-4 shadow-sm" id="winners-card" style="display: none;">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-trophy me-2"></i>Monthly Winners
+                            </h5>
+                        </div>
+                        <div class="card-body" id="monthly-winners">
+                            <p class="text-muted">Loading winners...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Articles Section -->
+        <section id="articles-section" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-newspaper me-2"></i>Articles</h2>
+                <button class="btn btn-primary" id="create-article-btn" onclick="showCreatePostModal('article')" style="display: none;">
+                    <i class="fas fa-plus me-1"></i>Create Article
+                </button>
+            </div>
+            
+            <!-- Top Articles This Month -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Top Articles This Month
+                    </h5>
+                </div>
+                <div class="card-body" id="top-articles">
+                    <p class="text-muted">Loading top articles...</p>
+                </div>
+            </div>
+
+            <!-- All Articles -->
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">All Articles</h5>
+                </div>
+                <div class="card-body" id="all-articles">
+                    <p class="text-muted">Loading articles...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Announcements Section -->
+        <section id="announcements-section" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-bullhorn me-2"></i>Announcements</h2>
+                <button class="btn btn-primary" id="create-announcement-btn" onclick="showCreatePostModal('announcement')" style="display: none;">
+                    <i class="fas fa-plus me-1"></i>Create Announcement
+                </button>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-body" id="announcements-content">
+                    <p class="text-muted">Loading announcements...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reminders Section -->
+        <section id="reminders-section" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-bell me-2"></i>Reminders</h2>
+                <button class="btn btn-primary" id="create-reminder-btn" onclick="showCreatePostModal('reminder')" style="display: none;">
+                    <i class="fas fa-plus me-1"></i>Create Reminder
+                </button>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-body" id="reminders-content">
+                    <p class="text-muted">Loading reminders...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Section -->
+        <section id="admin-section" class="content-section" style="display: none;">
+            <h2><i class="fas fa-cog me-2"></i>Admin Dashboard</h2>
+            
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card text-center bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Users</h5>
+                            <h2 id="total-users">0</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Posts</h5>
+                            <h2 id="total-posts">0</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Votes</h5>
+                            <h2 id="total-votes">0</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center bg-warning text-dark">
+                        <div class="card-body">
+                            <h5 class="card-title">Active Users</h5>
+                            <h2 id="active-users">0</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>User Management</h5>
+                        </div>
+                        <div class="card-body" id="user-management">
+                            <p class="text-muted">Loading users...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Content Management</h5>
+                        </div>
+                        <div class="card-body" id="content-management">
+                            <p class="text-muted">Loading content...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile-section" class="content-section" style="display: none;">
+            <h2><i class="fas fa-user-circle me-2"></i>Profile</h2>
+            
+            <div class="card">
+                <div class="card-body" id="profile-content">
+                    <p class="text-muted">Loading profile...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about-section" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-info-circle me-2"></i>About Druk School</h2>
+                <button class="btn btn-primary" id="manage-about-btn" onclick="showAboutManagement()" style="display: none;">
+                    <i class="fas fa-edit me-1"></i>Manage Content
+                </button>
+            </div>
+            
+            <div id="about-content">
+                <p class="text-muted">Loading about information...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="loginUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Register</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regFirstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="regFirstName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regLastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="regLastName" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="regUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="regUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="regEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="regEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="regPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="regPassword" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regRole" class="form-label">Role</label>
+                                    <select class="form-select" id="regRole" required>
+                                        <option value="">Select Role</option>
+                                        <option value="student">Student</option>
+                                        <option value="parent">Parent</option>
+                                        <option value="teacher">Teacher</option>
+                                        <option value="language_teacher">Language Teacher</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="regGradeLevel" class="form-label">Grade Level</label>
+                                    <select class="form-select" id="regGradeLevel" required>
+                                        <option value="">Select Grade Level</option>
+                                        <option value="junior">Junior</option>
+                                        <option value="middle">Middle</option>
+                                        <option value="senior">Senior</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="register()">Register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div class="modal fade" id="createPostModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createPostTitle">Create Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createPostForm">
+                        <input type="hidden" id="postType" value="">
+                        <div class="mb-3">
+                            <label for="postTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="postTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="postContent" class="form-label">Content</label>
+                            <textarea class="form-control" id="postContent" rows="6" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="postGradeLevel" class="form-label">Grade Level</label>
+                                    <select class="form-select" id="postGradeLevel" required>
+                                        <option value="all">All Grades</option>
+                                        <option value="junior">Junior</option>
+                                        <option value="middle">Middle</option>
+                                        <option value="senior">Senior</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6" id="expirationDiv" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="postExpiration" class="form-label">Expiration Date (Optional)</label>
+                                    <input type="datetime-local" class="form-control" id="postExpiration">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="createPost()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Management Modal -->
+    <div class="modal fade" id="aboutManagementModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Manage About Sections</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6>About Sections</h6>
+                        <button class="btn btn-success btn-sm" onclick="showCreateAboutModal()">
+                            <i class="fas fa-plus me-1"></i>Add Section
+                        </button>
+                    </div>
+                    <div id="about-management-content">
+                        <p class="text-muted">Loading sections...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit About Section Modal -->
+    <div class="modal fade" id="aboutSectionModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aboutSectionModalTitle">Create About Section</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="aboutSectionForm">
+                        <input type="hidden" id="aboutSectionId">
+                        <div class="mb-3">
+                            <label for="aboutSectionName" class="form-label">Section Name</label>
+                            <input type="text" class="form-control" id="aboutSectionName" required>
+                            <div class="form-text">Unique identifier for this section (e.g., contact, history)</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="aboutSectionTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="aboutSectionTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="aboutSectionContent" class="form-label">Content</label>
+                            <textarea class="form-control" id="aboutSectionContent" rows="10" required></textarea>
+                            <div class="form-text">You can use Markdown formatting</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="aboutDisplayOrder" class="form-label">Display Order</label>
+                                    <input type="number" class="form-control" id="aboutDisplayOrder" value="0">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="aboutIsActive" checked>
+                                        <label class="form-check-label" for="aboutIsActive">
+                                            Active
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAboutSection()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Contact Information</h5>
+                    <p>
+                        Phone: +975 17111111<br>
+                        Email: neanderthals.banana@gmail.com
+                    </p>
+                </div>
+            </div>
+            <p class="mb-0">&copy; 2025 Drukains Today. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>
+

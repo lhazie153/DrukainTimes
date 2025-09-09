@@ -1,0 +1,19 @@
+[build]
+command = "pip install -r requirements.txt"
+publish = "src/static"
+functions = "netlify/functions"
+
+[functions]
+python_version = "3.9"
+
+[[redirects]]
+from = "/api/*"
+to = "/.netlify/functions/main/:splat"
+status = 200
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+
